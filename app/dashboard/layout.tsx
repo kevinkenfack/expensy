@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server"; // Notez le /server à la fin
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({

@@ -11,6 +11,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { ArrowUpRight } from "lucide-react";
 import dynamic from 'next/dynamic';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navigation = [
   { name: 'Tableau de bord', href: '/dashboard', icon: <HomeIcon className="w-5 h-5" /> },
@@ -35,37 +37,38 @@ const navigation = [
   { name: 'Paramètres', href: '/dashboard/settings', icon: <CogIcon className="w-5 h-5" /> },
 ];
 
-const NavItem = ({ item, currentPath }) => (
-  <a
-    href={item.href}
-    className={`group relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 
-      ${currentPath === item.href ? 'bg-white/10 text-white' : 'hover:bg-white/5 text-gray-400 hover:text-white'}`}
-  >
-    {item.icon}
-    <span>{item.name}</span>
-    {((currentPath === '/' && item.name === 'Tableau de bord') ||
-      (currentPath === '/reports' && item.name === 'Rapports') ||
-      (currentPath === '/settings' && item.name === 'Paramètres') ||
-      (currentPath === '/transactions' && item.name === 'Transactions')) && (
-      <ArrowUpRight className="w-4 h-4 ml-auto" />
-    )}
-    {item.badge && (
-      <span className={`ml-auto px-2 py-0.5 text-xs rounded-full 
-        ${item.badge === 'Nouveau' 
-          ? 'bg-blue-500/20 text-blue-400'
-          : 'bg-white/10 text-gray-400'
-        }`}>
-        {item.badge}
-      </span>
-    )}
-  </a>
-);
+const NavItem = ({ item }: { item: any }) => {
+  const pathname = usePathname();
+  const isActive = pathname === item.href;
+
+  return (
+    <Link
+      href={item.href}
+      prefetch={true}
+      className={`group relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 
+        ${isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 text-gray-400 hover:text-white'}`}
+    >
+      {item.icon}
+      <span>{item.name}</span>
+      {isActive && <ArrowUpRight className="w-4 h-4 ml-auto" />}
+      {item.badge && (
+        <span className={`ml-auto px-2 py-0.5 text-xs rounded-full 
+          ${item.badge === 'Nouveau' 
+            ? 'bg-blue-500/20 text-blue-400'
+            : 'bg-white/10 text-gray-400'
+          }`}>
+          {item.badge}
+        </span>
+      )}
+    </Link>
+  );
+};
 
 const UserButton = dynamic(() => import('@clerk/nextjs').then((mod) => mod.UserButton), {
   ssr: false
 });
 
-export default function Sidebar({ currentPath, isMobileMenuOpen }) {
+export default function Sidebar({ isMobileMenuOpen }) {
   return (
     <aside className={`fixed h-screen w-64 glass-effect bg-sidebar border-r border-border transform transition-transform duration-300 ease-in-out z-40
       ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
@@ -92,7 +95,7 @@ export default function Sidebar({ currentPath, isMobileMenuOpen }) {
         <nav className="space-y-2">
           <div className="space-y-2 mb-4">
             {navigation.slice(0, 2).map((item) => (
-              <NavItem key={item.name} item={item} currentPath={currentPath} />
+              <NavItem key={item.name} item={item} />
             ))}
           </div>
 
@@ -100,7 +103,7 @@ export default function Sidebar({ currentPath, isMobileMenuOpen }) {
 
           <div className="space-y-2 mb-4">
             {navigation.slice(2, 5).map((item) => (
-              <NavItem key={item.name} item={item} currentPath={currentPath} />
+              <NavItem key={item.name} item={item} />
             ))}
           </div>
 
@@ -108,7 +111,7 @@ export default function Sidebar({ currentPath, isMobileMenuOpen }) {
 
           <div className="space-y-2">
             {navigation.slice(5).map((item) => (
-              <NavItem key={item.name} item={item} currentPath={currentPath} />
+              <NavItem key={item.name} item={item} />
             ))}
           </div>
         </nav>
