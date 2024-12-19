@@ -8,6 +8,8 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import fr from 'date-fns/locale/fr';
 import { format } from 'date-fns';
+import Sidebar from "./components/Sidebar";
+import TransactionModal from './components/TransactionModal';
 
 // Enregistrer la locale française
 registerLocale('fr', fr);
@@ -16,6 +18,8 @@ export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [dateRange, setDateRange] = useState([new Date(), new Date()]);
   const [startDate, endDate] = dateRange;
+  const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+  const [transactionType, setTransactionType] = useState<'income' | 'expense'>('income');
 
   const navigation = [
     { name: 'Tableau de bord', icon: <HomeIcon className="w-5 h-5" />, active: true },
@@ -43,6 +47,11 @@ export default function Home() {
     { name: 'Juin', dépenses: 3800, revenus: 2390 },
   ];
 
+  const openTransactionModal = (type: 'income' | 'expense') => {
+    setTransactionType(type);
+    setIsTransactionModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Gradient Background */}
@@ -61,56 +70,11 @@ export default function Home() {
       </button>
 
       {/* Sidebar */}
-      <aside className={`fixed h-screen w-64 glass-effect bg-sidebar border-r border-border transform transition-transform duration-300 ease-in-out z-40
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
-        <div className="p-6">
-          {/* Logo Section */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="relative group">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 p-[1px]">
-                <div className="w-full h-full rounded-2xl bg-background flex items-center justify-center">
-                  <WalletIcon className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                Mon Budget
-              </h1>
-              <p className="text-sm text-gray-400">Gérez vos finances</p>
-            </div>
-          </div>
-
-          {/* Navigation avec séparateurs */}
-          <nav className="space-y-2">
-            <div className="space-y-2 mb-4">
-              {navigation.slice(0, 2).map((item) => (
-                <NavItem key={item.name} item={item} />
-              ))}
-            </div>
-
-            <div className="h-px bg-white/5 my-4" />
-
-            <div className="space-y-2 mb-4">
-              {navigation.slice(2, 5).map((item) => (
-                <NavItem key={item.name} item={item} />
-              ))}
-            </div>
-
-            <div className="h-px bg-white/5 my-4" />
-
-            <div className="space-y-2">
-              {navigation.slice(5).map((item) => (
-                <NavItem key={item.name} item={item} />
-              ))}
-            </div>
-          </nav>
-        </div>
-      </aside>
+      <Sidebar currentPath="/" isMobileMenuOpen={isMobileMenuOpen} />
 
       {/* Main Content */}
       <main className="md:ml-64 p-4 md:p-8 pt-16 md:pt-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Header avec boutons */}
           <div className="flex flex-col gap-4 mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -119,13 +83,19 @@ export default function Home() {
               </h1>
               {/* Boutons plus responsifs */}
               <div className="flex flex-wrap gap-3 w-full sm:w-auto">
-                <button className="flex-1 sm:flex-none group relative overflow-hidden px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 hover:from-emerald-500/30 hover:to-emerald-600/30 text-emerald-400 transition-all duration-300 flex items-center justify-center gap-2">
+                <button 
+                  onClick={() => openTransactionModal('income')}
+                  className="flex-1 sm:flex-none group relative overflow-hidden px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 hover:from-emerald-500/30 hover:to-emerald-600/30 text-emerald-400 transition-all duration-300 flex items-center justify-center gap-2"
+                >
                   <span className="hidden sm:inline">Nouveau revenu</span>
                   <span className="sm:hidden">Revenu</span>
                   <span className="text-xl">🤑</span>
                 </button>
                 
-                <button className="flex-1 sm:flex-none group relative overflow-hidden px-4 py-2 rounded-xl bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 text-red-400 transition-all duration-300 flex items-center justify-center gap-2">
+                <button 
+                  onClick={() => openTransactionModal('expense')}
+                  className="flex-1 sm:flex-none group relative overflow-hidden px-4 py-2 rounded-xl bg-gradient-to-r from-red-500/20 to-red-600/20 hover:from-red-500/30 hover:to-red-600/30 text-red-400 transition-all duration-300 flex items-center justify-center gap-2"
+                >
                   <span className="hidden sm:inline">Nouvelle dépense</span>
                   <span className="sm:hidden">Dépense</span>
                   <span className="text-xl">😤</span>
@@ -537,33 +507,12 @@ export default function Home() {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
+
+      <TransactionModal
+        isOpen={isTransactionModalOpen}
+        onClose={() => setIsTransactionModalOpen(false)}
+        type={transactionType}
+      />
     </div>
   );
 }
-
-// Composant NavItem pour la navigation
-const NavItem = ({ item }) => (
-  <a
-    href={item.name === 'Paramètres' ? '/settings' : '#'}
-    className={`group relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 
-      ${item.active 
-        ? 'bg-white/10 text-white' 
-        : 'hover:bg-white/5 text-gray-400 hover:text-white'
-      }`}
-  >
-    {item.icon}
-    <span>{item.name}</span>
-    {item.active && (
-      <ArrowUpRight className="w-4 h-4 ml-auto" />
-    )}
-    {item.badge && (
-      <span className={`ml-auto px-2 py-0.5 text-xs rounded-full 
-        ${item.badge === 'Nouveau' 
-          ? 'bg-blue-500/20 text-blue-400'
-          : 'bg-white/10 text-gray-400'
-        }`}>
-        {item.badge}
-      </span>
-    )}
-  </a>
-);

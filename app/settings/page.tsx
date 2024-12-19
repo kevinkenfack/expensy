@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { HomeIcon, WalletIcon, ChartBarIcon, CogIcon, Bars3Icon as MenuIcon, XMarkIcon as XIcon, TagIcon, DocumentChartBarIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { ArrowUpRight } from "lucide-react";
+import Sidebar from "../components/Sidebar";
 
 const currencies = [
   { code: 'EUR', symbol: '€', name: 'Euro' },
@@ -18,7 +19,19 @@ const currencies = [
 // Composant NavItem (identique à celui du dashboard)
 const NavItem = ({ item }) => (
   <a
-    href={item.name === 'Paramètres' ? '/settings' : '/'}
+    href={
+      item.name === 'Rapports' 
+        ? '/reports' 
+        : item.name === 'Paramètres' 
+          ? '/settings'
+          : item.name === 'Catégories'
+            ? '/categories'
+            : item.name === 'Analyses'
+              ? '/analytics'
+              : item.name === 'Transactions'
+                ? '/transactions'
+                : '/'
+    }
     className={`group relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 
       ${item.name === 'Paramètres'
         ? 'bg-white/10 text-white' 
@@ -88,56 +101,11 @@ export default function Settings() {
       </button>
 
       {/* Sidebar */}
-      <aside className={`fixed h-screen w-64 glass-effect bg-sidebar border-r border-border transform transition-transform duration-300 ease-in-out z-40
-        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
-        <div className="p-6">
-          {/* Logo Section */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="relative group">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 p-[1px]">
-                <div className="w-full h-full rounded-2xl bg-background flex items-center justify-center">
-                  <WalletIcon className="w-6 h-6 text-white" />
-                </div>
-              </div>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                Mon Budget
-              </h1>
-              <p className="text-sm text-gray-400">Gérez vos finances</p>
-            </div>
-          </div>
-
-          {/* Navigation avec séparateurs */}
-          <nav className="space-y-2">
-            <div className="space-y-2 mb-4">
-              {navigation.slice(0, 2).map((item) => (
-                <NavItem key={item.name} item={item} />
-              ))}
-            </div>
-
-            <div className="h-px bg-white/5 my-4" />
-
-            <div className="space-y-2 mb-4">
-              {navigation.slice(2, 5).map((item) => (
-                <NavItem key={item.name} item={item} />
-              ))}
-            </div>
-
-            <div className="h-px bg-white/5 my-4" />
-
-            <div className="space-y-2">
-              {navigation.slice(5).map((item) => (
-                <NavItem key={item.name} item={item} />
-              ))}
-            </div>
-          </nav>
-        </div>
-      </aside>
+      <Sidebar currentPath="/settings" isMobileMenuOpen={isMobileMenuOpen} />
 
       {/* Main Content */}
       <main className="md:ml-64 p-4 md:p-8 pt-16 md:pt-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* En-tête */}
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-purple-500 p-[1px]">
@@ -166,7 +134,7 @@ export default function Settings() {
             <h2 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
               Devise
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {currencies.map((currency) => (
                 <button
                   key={currency.code}
@@ -197,13 +165,24 @@ export default function Settings() {
           </div>
 
           {/* Autres sections */}
-          <div className="mt-8 rounded-3xl bg-card border border-border p-6">
-            <h2 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
-              D&apos;autres Paramètres
-            </h2>
-            <p className="text-gray-400">
-              D'autres options de personnalisation seront bientôt disponibles...
-            </p>
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-3xl bg-card border border-border p-6">
+              <h2 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
+                Préférences
+              </h2>
+              <p className="text-gray-400">
+                Les options de personnalisation seront bientôt disponibles...
+              </p>
+            </div>
+
+            <div className="rounded-3xl bg-card border border-border p-6">
+              <h2 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
+                Notifications
+              </h2>
+              <p className="text-gray-400">
+                Les paramètres de notification seront bientôt disponibles...
+              </p>
+            </div>
           </div>
         </div>
       </main>
