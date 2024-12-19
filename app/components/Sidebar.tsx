@@ -10,22 +10,29 @@ import {
   DocumentChartBarIcon 
 } from "@heroicons/react/24/outline";
 import { ArrowUpRight } from "lucide-react";
+import dynamic from 'next/dynamic';
 
 const navigation = [
-  { name: 'Tableau de bord', icon: <HomeIcon className="w-5 h-5" /> },
-  { name: 'Transactions', icon: <WalletIcon className="w-5 h-5" /> },
+  { name: 'Tableau de bord', href: '/', icon: <HomeIcon className="w-5 h-5" /> },
+  { name: 'Transactions', href: '/transactions', icon: <WalletIcon className="w-5 h-5" /> },
   { 
     name: 'Catégories', 
+    href: '/categories',
     icon: <TagIcon className="w-5 h-5" />,
     badge: '12'
   },
-  { name: 'Analyses', icon: <ChartBarIcon className="w-5 h-5" /> },
+  { 
+    name: 'Analyses', 
+    href: '/analyses',
+    icon: <ChartBarIcon className="w-5 h-5" /> 
+  },
   { 
     name: 'Rapports', 
+    href: '/reports',
     icon: <DocumentChartBarIcon className="w-5 h-5" />,
     badge: 'Nouveau'
   },
-  { name: 'Paramètres', icon: <CogIcon className="w-5 h-5" /> },
+  { name: 'Paramètres', href: '/settings', icon: <CogIcon className="w-5 h-5" /> },
 ];
 
 const NavItem = ({ item, currentPath }) => (
@@ -38,7 +45,7 @@ const NavItem = ({ item, currentPath }) => (
           : item.name === 'Catégories'
             ? '/categories'
             : item.name === 'Analyses'
-              ? '/analytics'
+              ? '/analyses'
               : item.name === 'Transactions'
                 ? '/transactions'
                 : '/'
@@ -73,6 +80,10 @@ const NavItem = ({ item, currentPath }) => (
     )}
   </a>
 );
+
+const UserButton = dynamic(() => import('@clerk/nextjs').then((mod) => mod.UserButton), {
+  ssr: false
+});
 
 export default function Sidebar({ currentPath, isMobileMenuOpen }) {
   return (
@@ -121,6 +132,25 @@ export default function Sidebar({ currentPath, isMobileMenuOpen }) {
             ))}
           </div>
         </nav>
+
+        {/* User Section */}
+        <div className="mt-auto pt-4 border-t border-white/10">
+          <div className="flex items-center gap-3">
+            <UserButton 
+              appearance={{
+                elements: {
+                  rootBox: "w-10 h-10",
+                  userButtonAvatarBox: "w-10 h-10",
+                  userButtonTrigger: "rounded-xl hover:bg-white/10",
+                }
+              }}
+            />
+            <div className="flex-1">
+              <p className="text-sm font-medium">Mon Compte</p>
+              <p className="text-xs text-gray-400">Gérer votre profil</p>
+            </div>
+          </div>
+        </div>
       </div>
     </aside>
   );
