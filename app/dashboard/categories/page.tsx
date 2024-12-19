@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from 'react';
-import CategoryModal from '../components/CategoryModal';
-import Sidebar from '../components/Sidebar';
+import CategoryModal from '../../components/CategoryModal';
+import Sidebar from '../../components/Sidebar';
 import { Bars3Icon as MenuIcon, XMarkIcon as XIcon } from "@heroicons/react/24/outline";
 
 export default function Categories() {

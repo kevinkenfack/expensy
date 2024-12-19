@@ -13,53 +13,33 @@ import { ArrowUpRight } from "lucide-react";
 import dynamic from 'next/dynamic';
 
 const navigation = [
-  { name: 'Tableau de bord', href: '/', icon: <HomeIcon className="w-5 h-5" /> },
-  { name: 'Transactions', href: '/transactions', icon: <WalletIcon className="w-5 h-5" /> },
+  { name: 'Tableau de bord', href: '/dashboard', icon: <HomeIcon className="w-5 h-5" /> },
+  { name: 'Transactions', href: '/dashboard/transactions', icon: <WalletIcon className="w-5 h-5" /> },
   { 
     name: 'Catégories', 
-    href: '/categories',
+    href: '/dashboard/categories',
     icon: <TagIcon className="w-5 h-5" />,
     badge: '12'
   },
   { 
     name: 'Analyses', 
-    href: '/analyses',
+    href: '/dashboard/analyses',
     icon: <ChartBarIcon className="w-5 h-5" /> 
   },
   { 
     name: 'Rapports', 
-    href: '/reports',
+    href: '/dashboard/reports',
     icon: <DocumentChartBarIcon className="w-5 h-5" />,
     badge: 'Nouveau'
   },
-  { name: 'Paramètres', href: '/settings', icon: <CogIcon className="w-5 h-5" /> },
+  { name: 'Paramètres', href: '/dashboard/settings', icon: <CogIcon className="w-5 h-5" /> },
 ];
 
 const NavItem = ({ item, currentPath }) => (
   <a
-    href={
-      item.name === 'Rapports' 
-        ? '/reports' 
-        : item.name === 'Paramètres' 
-          ? '/settings'
-          : item.name === 'Catégories'
-            ? '/categories'
-            : item.name === 'Analyses'
-              ? '/analyses'
-              : item.name === 'Transactions'
-                ? '/transactions'
-                : '/'
-    }
+    href={item.href}
     className={`group relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 
-      ${(currentPath === '/' && item.name === 'Tableau de bord') ||
-        (currentPath === '/reports' && item.name === 'Rapports') ||
-        (currentPath === '/settings' && item.name === 'Paramètres') ||
-        (currentPath === '/categories' && item.name === 'Catégories') ||
-        (currentPath === '/analytics' && item.name === 'Analyses') ||
-        (currentPath === '/transactions' && item.name === 'Transactions')
-          ? 'bg-white/10 text-white' 
-          : 'hover:bg-white/5 text-gray-400 hover:text-white'
-      }`}
+      ${currentPath === item.href ? 'bg-white/10 text-white' : 'hover:bg-white/5 text-gray-400 hover:text-white'}`}
   >
     {item.icon}
     <span>{item.name}</span>

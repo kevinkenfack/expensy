@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { ArrowUpRight } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 
 const COLORS = ['#10B981', '#3B82F6', '#6366F1', '#8B5CF6', '#EC4899'];
 

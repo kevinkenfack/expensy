@@ -13,7 +13,7 @@ import {
   FunnelIcon,
 } from "@heroicons/react/24/outline";
 import { ArrowUpRight } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 
 // Données de test pour les transactions
 const transactions = [

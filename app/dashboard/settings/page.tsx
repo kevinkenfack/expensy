@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { HomeIcon, WalletIcon, ChartBarIcon, CogIcon, Bars3Icon as MenuIcon, XMarkIcon as XIcon, TagIcon, DocumentChartBarIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { ArrowUpRight } from "lucide-react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 
 const currencies = [
   { code: 'EUR', symbol: '€', name: 'Euro' },
