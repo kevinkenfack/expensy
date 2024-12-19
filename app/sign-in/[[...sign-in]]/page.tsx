@@ -15,6 +15,15 @@ export default function SignInPage() {
 
         <SignIn 
           appearance={{
+            variables: {
+              colorPrimary: "#3b82f6",
+              colorBackground: "#111111",
+              colorText: "white",
+              colorTextSecondary: "#9ca3af",
+              colorInputBackground: "rgba(255, 255, 255, 0.1)",
+              colorInputText: "white",
+              colorTextOnPrimaryBackground: "white",
+            },
             elements: {
               rootBox: "w-full",
               card: "bg-card/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-xl p-8",

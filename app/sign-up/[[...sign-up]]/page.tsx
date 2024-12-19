@@ -3,7 +3,6 @@ import { SignUp } from "@clerk/nextjs";
 export default function SignUpPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      {/* Gradient Background */}
       <div className="fixed inset-0 bg-gradient-to-b from-blue-600/5 via-purple-600/5 to-transparent pointer-events-none" />
       
       <div className="relative w-full max-w-md">
@@ -16,6 +15,15 @@ export default function SignUpPage() {
 
         <SignUp 
           appearance={{
+            variables: {
+              colorPrimary: "#3b82f6",
+              colorBackground: "#111111",
+              colorText: "white",
+              colorTextSecondary: "#9ca3af",
+              colorInputBackground: "rgba(255, 255, 255, 0.1)",
+              colorInputText: "white",
+              colorTextOnPrimaryBackground: "white",
+            },
             elements: {
               rootBox: "w-full",
               card: "bg-card/95 backdrop-blur-xl border border-white/10 rounded-3xl shadow-xl",
