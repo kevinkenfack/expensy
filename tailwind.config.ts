@@ -9,8 +9,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        sidebar: 'var(--sidebar)',
+        card: 'var(--card)',
+        border: 'var(--border)',
+        hover: 'var(--hover)',
       },
     },
   },
