@@ -165,7 +165,7 @@ export default function Home() {
                   onClick={() => setDateRange([new Date(), new Date()])}
                   className="flex-1 sm:flex-none px-3 py-1.5 rounded-xl hover:bg-white/5 text-gray-400 hover:text-white transition-colors text-sm whitespace-nowrap"
                 >
-                  Aujourd'hui
+                  Aujourd&apos;hui
                 </button>
                 <button 
                   onClick={() => {
@@ -294,7 +294,7 @@ export default function Home() {
                     {
                       name: 'Courses Carrefour',
                       amount: '-156,32 €',
-                      date: "Aujourd'hui",
+                      date: "Aujourd&apos;hui",
                       icon: '🛒',
                       category: 'Alimentation'
                     },
@@ -413,7 +413,7 @@ export default function Home() {
                   name: 'Abonnement Netflix',
                   category: 'Divertissement',
                   amount: '-14,99 €',
-                  date: "Aujourd'hui",
+                  date: "Aujourd&apos;hui",
                   icon: '🎬',
                   type: 'expense'
                 },

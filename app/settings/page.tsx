@@ -199,7 +199,7 @@ export default function Settings() {
           {/* Autres sections */}
           <div className="mt-8 rounded-3xl bg-card border border-border p-6">
             <h2 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-6">
-              Autres Paramètres
+              D&apos;autres Paramètres
             </h2>
             <p className="text-gray-400">
               D'autres options de personnalisation seront bientôt disponibles...
