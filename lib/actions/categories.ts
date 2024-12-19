@@ -33,4 +33,55 @@ export async function createCategory(data: {
 
   revalidatePath("/dashboard/categories");
   return category;
+}
+
+export async function getCategories(type?: "INCOME" | "EXPENSE") {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("Non autorisé");
+  }
+
+  const user = await db.user.findUnique({
+    where: { clerkId: userId },
+  });
+
+  if (!user) {
+    throw new Error("Utilisateur non trouvé");
+  }
+
+  return db.category.findMany({
+    where: {
+      userId: user.id,
+      type: type,
+      isArchived: false,
+    },
+    orderBy: {
+      name: 'asc',
+    },
+  });
+}
+
+export async function archiveCategory(id: string) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("Non autorisé");
+  }
+
+  const category = await db.category.findUnique({
+    where: { id },
+    include: { user: true },
+  });
+
+  if (!category || category.user.clerkId !== userId) {
+    throw new Error("Catégorie non trouvée");
+  }
+
+  await db.category.update({
+    where: { id },
+    data: { isArchived: true },
+  });
+
+  revalidatePath("/dashboard/categories");
 } 

@@ -1,6 +1,4 @@
-"use client";
-
-import { auth } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server"; // Notez le /server à la fin
 import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
@@ -8,9 +6,9 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = auth();
+  const user = await currentUser();
 
-  if (!userId) {
+  if (!user) {
     redirect("/unauthorized");
   }
 
@@ -20,4 +18,4 @@ export default async function DashboardLayout({
       {children}
     </div>
   );
-} 
+}

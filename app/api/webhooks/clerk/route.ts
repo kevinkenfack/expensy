@@ -4,6 +4,15 @@ import { WebhookEvent } from '@clerk/nextjs/server';
 import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
 
+const defaultCategories = [
+  { name: 'Salaire', icon: '💰', type: 'INCOME', isDefault: true },
+  { name: 'Freelance', icon: '💻', type: 'INCOME', isDefault: true },
+  { name: 'Alimentation', icon: '🛒', type: 'EXPENSE', isDefault: true },
+  { name: 'Transport', icon: '🚗', type: 'EXPENSE', isDefault: true },
+  { name: 'Logement', icon: '🏠', type: 'EXPENSE', isDefault: true },
+  { name: 'Loisirs', icon: '🎮', type: 'EXPENSE', isDefault: true },
+];
+
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
@@ -45,9 +54,12 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === 'user.created') {
-    await db.user.create({
+    const user = await db.user.create({
       data: {
         clerkId: evt.data.id,
+        categories: {
+          create: defaultCategories,
+        },
       },
     });
   }
