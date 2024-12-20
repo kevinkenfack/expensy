@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import { TransactionType } from "@prisma/client"; // Ajout de l'import
 
 export async function POST(req: Request) {
   try {
@@ -19,13 +20,13 @@ export async function POST(req: Request) {
     // Calculer les statistiques
     const stats = {
       total: transactions.reduce((acc, t) => 
-        t.type === 'income' ? acc + t.amount : acc - t.amount, 0
+        t.type === TransactionType.INCOME ? acc + t.amount : acc - t.amount, 0
       ),
       income: transactions
-        .filter(t => t.type === 'income')
+        .filter(t => t.type === TransactionType.INCOME)
         .reduce((acc, t) => acc + t.amount, 0),
       expense: transactions
-        .filter(t => t.type === 'expense')
+        .filter(t => t.type === TransactionType.EXPENSE)
         .reduce((acc, t) => acc + t.amount, 0),
     };
 
@@ -34,4 +35,4 @@ export async function POST(req: Request) {
     console.error('Erreur lors du calcul des statistiques:', error);
     return new NextResponse("Erreur interne du serveur", { status: 500 });
   }
-} 
+}
