@@ -18,8 +18,9 @@ export function useCategories() {
       setError(null);
       await createCategory(data);
     } catch (err) {
-      setError(err.message);
-      throw err;
+      const error = err as Error;
+      setError(error.message);
+      throw error;
     } finally {
       setIsLoading(false);
     }

@@ -10,7 +10,8 @@ export async function createCategory(data: {
   type: "INCOME" | "EXPENSE";
   color?: string;
 }) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");
@@ -37,8 +38,8 @@ export async function createCategory(data: {
 
 export async function getCategories() {
   try {
-    const { userId } = auth();
-    console.log("Getting categories for user:", userId);
+    const session = await auth();
+    const userId = session?.userId;
 
     if (!userId) {
       console.log("No userId found in auth");
@@ -75,7 +76,8 @@ export async function getCategories() {
 }
 
 export async function archiveCategory(id: string) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");

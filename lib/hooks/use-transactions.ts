@@ -14,8 +14,9 @@ export function useTransactions() {
       setError(null);
       await createTransaction(data);
     } catch (err) {
-      setError(err.message);
-      throw err;
+      const error = err as Error;
+      setError(error.message);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -27,8 +28,9 @@ export function useTransactions() {
       setError(null);
       await updateTransaction(id, data);
     } catch (err) {
-      setError(err.message);
-      throw err;
+      const error = err as Error;
+      setError(error.message);
+      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -40,8 +42,9 @@ export function useTransactions() {
       setError(null);
       await deleteTransaction(id);
     } catch (err) {
-      setError(err.message);
-      throw err;
+      const error = err as Error;
+      setError(error.message);
+      throw error;
     } finally {
       setIsLoading(false);
     }

@@ -5,7 +5,8 @@ import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 export async function updateUserCurrency(currency: string) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");
@@ -21,7 +22,8 @@ export async function updateUserCurrency(currency: string) {
 }
 
 export async function getUserSettings() {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");

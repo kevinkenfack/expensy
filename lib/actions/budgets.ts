@@ -4,13 +4,15 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
-export async function createBudget(data: {
+export async function createBudget({
+  amount,
+  categoryId,
+}: {
   amount: number;
-  month: number;
-  year: number;
   categoryId: string;
 }) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");
@@ -26,8 +28,11 @@ export async function createBudget(data: {
 
   const budget = await db.budget.create({
     data: {
-      ...data,
+      amount,
+      categoryId,
       userId: user.id,
+      month: new Date().getMonth() + 1,
+      year: new Date().getFullYear(),
     },
   });
 
@@ -36,7 +41,8 @@ export async function createBudget(data: {
 }
 
 export async function getBudgets(month: number, year: number) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");

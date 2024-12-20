@@ -33,7 +33,8 @@ export function useStats(startDate?: Date, endDate?: Date) {
         const data = await response.json();
         setStats(data);
       } catch (err) {
-        setError(err.message);
+        const error = err as Error;
+        setError(error.message);
       } finally {
         setIsLoading(false);
       }
