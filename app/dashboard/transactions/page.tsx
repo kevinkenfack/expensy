@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { WalletIcon } from "@heroicons/react/24/outline";
+import { WalletIcon, XMarkIcon as XIcon, Bars3Icon as MenuIcon, FunnelIcon, PlusIcon } from "@heroicons/react/24/outline";
 import Sidebar from "../../components/Sidebar";
 
 // Données de test pour les transactions

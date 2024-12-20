@@ -40,7 +40,8 @@ const navigation = [
 interface NavItem {
   name: string;
   href: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  icon: JSX.Element;
+  badge?: string;
 }
 
 const NavItem = ({ item }: { item: NavItem }) => {
@@ -74,7 +75,12 @@ const UserButton = dynamic(() => import('@clerk/nextjs').then((mod) => mod.UserB
   ssr: false
 });
 
-export default function Sidebar({ isMobileMenuOpen }) {
+interface SidebarProps {
+  isMobileMenuOpen: boolean;
+  currentPath: string;
+}
+
+export default function Sidebar({ isMobileMenuOpen, currentPath }: SidebarProps) {
   return (
     <aside className={`fixed h-screen w-64 glass-effect bg-sidebar border-r border-border transform transition-transform duration-300 ease-in-out z-40
       ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
