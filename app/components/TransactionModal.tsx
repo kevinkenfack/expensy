@@ -4,7 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import fr from 'date-fns/locale/fr';
+import { fr } from 'date-fns/locale/fr';
 
 interface TransactionModalProps {
   isOpen: boolean;
@@ -33,7 +33,7 @@ export default function TransactionModal({ isOpen, onClose, type }: TransactionM
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date | null>(new Date());
 
   useEffect(() => {
     if (isOpen) {
@@ -152,7 +152,7 @@ export default function TransactionModal({ isOpen, onClose, type }: TransactionM
                     </label>
                     <DatePicker
                       selected={date}
-                      onChange={(date) => setDate(date)}
+                      onChange={(date: Date | null) => setDate(date || new Date())}
                       locale={fr}
                       dateFormat="dd MMMM yyyy"
                       className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white 
