@@ -1,0 +1,81 @@
+Directory structure:
+└── kevinkenfack-expensy
+    ├── middleware.ts
+    ├── prisma
+    │   └── schema.prisma
+    ├── next.config.js
+    ├── .eslintrc.json
+    ├── exemple.jsx
+    ├── components
+    │   └── LoadingCategories.tsx
+    ├── public
+    ├── next.config.ts
+    ├── lib
+    │   ├── prisma.ts
+    │   ├── hooks
+    │   │   ├── use-transactions.ts
+    │   │   ├── use-stats.ts
+    │   │   ├── use-sync-user.ts
+    │   │   └── use-categories.ts
+    │   ├── validations
+    │   │   ├── transaction.ts
+    │   │   └── category.ts
+    │   ├── db.ts
+    │   ├── actions
+    │   │   ├── transactions.ts
+    │   │   ├── budgets.ts
+    │   │   ├── settings.ts
+    │   │   └── categories.ts
+    │   └── types
+    │       └── index.ts
+    ├── package.json
+    ├── postcss.config.mjs
+    ├── eslint.config.mjs
+    ├── tailwind.config.ts
+    ├── tsconfig.json
+    ├── README.md
+    └── app
+        ├── api
+        │   ├── webhooks
+        │   │   └── clerk
+        │   │       └── route.ts
+        │   ├── user
+        │   │   └── sync
+        │   │       └── route.ts
+        │   └── stats
+        │       └── route.ts
+        ├── page.tsx
+        ├── globals.css
+        ├── unauthorized
+        │   └── page.tsx
+        ├── sign-in
+        │   └── [[...sign-in]]
+        │       └── page.tsx
+        ├── components
+        │   ├── TransactionModal.tsx
+        │   ├── LoadingCategories.tsx
+        │   ├── Footer.tsx
+        │   ├── CategoryModal.tsx
+        │   └── Sidebar.tsx
+        ├── favicon.ico
+        ├── dashboard
+        │   ├── transactions
+        │   │   └── page.tsx
+        │   ├── page.tsx
+        │   ├── categories
+        │   │   ├── page.tsx
+        │   │   └── _components
+        │   │       └── CategoriesClient.tsx
+        │   ├── loading.tsx
+        │   ├── settings
+        │   │   └── page.tsx
+        │   ├── analyses
+        │   │   └── page.tsx
+        │   ├── layout.tsx
+        │   ├── reports
+        │   │   └── page.tsx
+        │   └── template.tsx
+        ├── layout.tsx
+        └── sign-up
+            └── [[...sign-up]]
+                └── page.tsx

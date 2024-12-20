@@ -1,22 +1,12 @@
-import type { NextConfig } from "next";
+import { NextConfig } from 'next'
 
 const config: NextConfig = {
-  reactStrictMode: true,
-  experimental: {
-    optimizeCss: true,
-  },
-  pageExtensions: ['tsx', 'ts'],
-  poweredByHeader: false,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production",
-  },
-  images: {
-    domains: ['localhost'],
-    unoptimized: false,
-  },
   eslint: {
     ignoreDuringBuilds: true,
   },
-};
+  images: {
+    domains: ['expensy-ruby.vercel.app'],
+  },
+}
 
-export default config;
+export default config
