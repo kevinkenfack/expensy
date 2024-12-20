@@ -35,31 +35,43 @@ export async function createCategory(data: {
   return category;
 }
 
-export async function getCategories(type?: "INCOME" | "EXPENSE") {
-  const { userId } = auth();
+export async function getCategories() {
+  try {
+    const { userId } = auth();
+    console.log("Getting categories for user:", userId);
 
-  if (!userId) {
-    throw new Error("Non autorisé");
+    if (!userId) {
+      console.log("No userId found in auth");
+      throw new Error("Non autorisé");
+    }
+
+    const user = await db.user.findUnique({
+      where: { clerkId: userId },
+    });
+
+    console.log("Found user:", user);
+
+    if (!user) {
+      console.log("No user found in database");
+      throw new Error("Utilisateur non trouvé");
+    }
+
+    const categories = await db.category.findMany({
+      where: {
+        userId: user.id,
+        isArchived: false,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+
+    console.log("Found categories:", categories);
+    return categories;
+  } catch (error) {
+    console.error("Error in getCategories:", error);
+    throw error;
   }
-
-  const user = await db.user.findUnique({
-    where: { clerkId: userId },
-  });
-
-  if (!user) {
-    throw new Error("Utilisateur non trouvé");
-  }
-
-  return db.category.findMany({
-    where: {
-      userId: user.id,
-      type: type,
-      isArchived: false,
-    },
-    orderBy: {
-      name: 'asc',
-    },
-  });
 }
 
 export async function archiveCategory(id: string) {

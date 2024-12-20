@@ -25,33 +25,6 @@ model User {
   recurrings   RecurringTransaction[]
 }
 
-model Transaction {
-  id          String          @id @default(cuid())
-  amount      Float
-  description String?
-  date        DateTime
-  type        TransactionType
-  status      Status          @default(COMPLETED)
-  paymentMode PaymentMode?
-  attachments String[]        // URLs des pièces jointes
-  notes       String?
-  tags        String[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
-
-  recurringId String?
-  recurring   RecurringTransaction? @relation(fields: [recurringId], references: [id])
-
-  @@index([userId])
-  @@index([categoryId])
-  @@index([date])
-}
-
 model Category {
   id          String          @id @default(cuid())
   name        String
@@ -74,6 +47,31 @@ model Category {
   @@unique([userId, name, type]) // Empêche les doublons pour un utilisateur
 }
 
+model Transaction {
+  id          String          @id @default(cuid())
+  amount      Float
+  description String?
+  date        DateTime
+  type        TransactionType
+  status      Status          @default(COMPLETED)
+  paymentMode PaymentMode?
+  notes       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  recurringId String?
+  recurring   RecurringTransaction? @relation(fields: [recurringId], references: [id])
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([date])
+}
+
 model Budget {
   id        String   @id @default(cuid())
   amount    Float
@@ -91,7 +89,7 @@ model Budget {
 
   @@index([userId])
   @@index([categoryId])
-  @@unique([userId, categoryId, month, year]) // Un budget par catégorie/mois/année
+  @@unique([userId, categoryId, month, year])
 }
 
 model Goal {

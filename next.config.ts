@@ -1,7 +1,19 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const config: NextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    optimizeCss: true,
+  },
+  pageExtensions: ['tsx', 'ts'],
+  poweredByHeader: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  images: {
+    domains: ['localhost'],
+    unoptimized: false,
+  },
 };
 
-export default nextConfig;
+export default config;

@@ -1,32 +1,72 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { getCategories } from '@/lib/actions/categories';
 import CategoryModal from '../../components/CategoryModal';
 import Sidebar from '../../components/Sidebar';
+import { Category } from '@prisma/client';
 import { Bars3Icon as MenuIcon, XMarkIcon as XIcon } from "@heroicons/react/24/outline";
+import LoadingCategories from "@/components/LoadingCategories";
 
 export default function Categories() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [categoryType, setCategoryType] = useState<'income' | 'expense'>('income');
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadCategories() {
+      try {
+        const data = await getCategories();
+        setCategories(data);
+      } catch (error) {
+        toast.error("Erreur lors du chargement des catégories");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadCategories();
+  }, []);
+
+  const handleCreateCategory = async (data: {
+    name: string;
+    icon: string;
+    type: "INCOME" | "EXPENSE";
+  }) => {
+    try {
+      // Appel à l'action de création
+      await createCategory(data);
+      toast.success("Catégorie créée avec succès");
+      // Recharger les catégories
+      const updatedCategories = await getCategories();
+      setCategories(updatedCategories);
+      setIsCategoryModalOpen(false);
+    } catch (error) {
+      toast.error("Erreur lors de la création de la catégorie");
+    }
+  };
+
+  const expenseCategories = categories.filter(cat => cat.type === 'EXPENSE');
+  const incomeCategories = categories.filter(cat => cat.type === 'INCOME');
 
   const openCategoryModal = (type: 'income' | 'expense') => {
     setCategoryType(type);
     setIsCategoryModalOpen(true);
   };
 
-  const expenseCategories = [
-    { id: 1, name: 'Alimentation', icon: '🛒', count: 24 },
-    { id: 2, name: 'Transport', icon: '🚗', count: 15 },
-    { id: 3, name: 'Logement', icon: '🏠', count: 8 },
-    { id: 4, name: 'Loisirs', icon: '🎮', count: 12 },
-  ];
-
-  const incomeCategories = [
-    { id: 1, name: 'Salaire', icon: '💰', count: 12 },
-    { id: 2, name: 'Freelance', icon: '💻', count: 8 },
-    { id: 3, name: 'Investissements', icon: '📈', count: 4 },
-  ];
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Sidebar currentPath="/categories" isMobileMenuOpen={isMobileMenuOpen} />
+        <main className="md:ml-64 p-4 md:p-8 pt-16 md:pt-8">
+          <LoadingCategories />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -80,7 +120,7 @@ export default function Categories() {
               <div className="rounded-3xl bg-card p-6 backdrop-blur-xl">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-                    Catégories de dépenses
+                    Catégories de d��penses
                   </h2>
                   <span className="px-3 py-1 rounded-full text-sm bg-red-500/10 text-red-400">
                     {expenseCategories.length}
