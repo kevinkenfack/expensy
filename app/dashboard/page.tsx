@@ -6,7 +6,7 @@ import { useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import fr from 'date-fns/locale/fr';
+import { fr } from 'date-fns/locale/fr';
 import { format } from 'date-fns';
 import Sidebar from "../components/Sidebar";
 import TransactionModal from '../components/TransactionModal';
@@ -16,7 +16,7 @@ registerLocale('fr', fr);
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [dateRange, setDateRange] = useState([new Date(), new Date()]);
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([new Date(), new Date()]);
   const [startDate, endDate] = dateRange;
   const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<'income' | 'expense'>('income');
@@ -93,9 +93,9 @@ export default function Home() {
                 <div className="flex items-center gap-2 w-full">
                   <DatePicker
                     selectsRange={true}
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={(update) => setDateRange(update)}
+                    startDate={dateRange[0]}
+                    endDate={dateRange[1]}
+                    onChange={(update: [Date | null, Date | null]) => setDateRange(update)}
                     locale="fr"
                     dateFormat="dd MMM yyyy"
                     className="bg-transparent border-none text-white focus:outline-none cursor-pointer w-full"
