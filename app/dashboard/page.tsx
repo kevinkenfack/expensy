@@ -21,23 +21,6 @@ export default function Home() {
   const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<'income' | 'expense'>('income');
 
-  const navigation = [
-    { name: 'Tableau de bord', icon: <HomeIcon className="w-5 h-5" />, active: true },
-    { name: 'Transactions', icon: <WalletIcon className="w-5 h-5" /> },
-    { 
-      name: 'Catégories', 
-      icon: <TagIcon className="w-5 h-5" />,
-      badge: '12' // Nombre de catégories
-    },
-    { name: 'Analyses', icon: <ChartBarIcon className="w-5 h-5" /> },
-    { 
-      name: 'Rapports', 
-      icon: <DocumentChartBarIcon className="w-5 h-5" />,
-      badge: 'Nouveau'
-    },
-    { name: 'Paramètres', icon: <CogIcon className="w-5 h-5" /> },
-  ];
-
   const chartData = [
     { name: 'Jan', dépenses: 2400, revenus: 4000 },
     { name: 'Fév', dépenses: 1398, revenus: 3000 },

@@ -16,66 +16,10 @@ const currencies = [
   { code: 'CNY', symbol: '¥', name: 'Yuan chinois' },
 ];
 
-// Composant NavItem (identique à celui du dashboard)
-const NavItem = ({ item }) => (
-  <a
-    href={
-      item.name === 'Rapports' 
-        ? '/reports' 
-        : item.name === 'Paramètres' 
-          ? '/settings'
-          : item.name === 'Catégories'
-            ? '/categories'
-            : item.name === 'Analyses'
-              ? '/analytics'
-              : item.name === 'Transactions'
-                ? '/transactions'
-                : '/'
-    }
-    className={`group relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 
-      ${item.name === 'Paramètres'
-        ? 'bg-white/10 text-white' 
-        : 'hover:bg-white/5 text-gray-400 hover:text-white'
-      }`}
-  >
-    {item.icon}
-    <span>{item.name}</span>
-    {item.name === 'Paramètres' && (
-      <ArrowUpRight className="w-4 h-4 ml-auto" />
-    )}
-    {item.badge && (
-      <span className={`ml-auto px-2 py-0.5 text-xs rounded-full 
-        ${item.badge === 'Nouveau' 
-          ? 'bg-blue-500/20 text-blue-400'
-          : 'bg-white/10 text-gray-400'
-        }`}>
-        {item.badge}
-      </span>
-    )}
-  </a>
-);
-
 export default function Settings() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState('EUR');
   const [showSuccess, setShowSuccess] = useState(false);
-
-  const navigation = [
-    { name: 'Tableau de bord', icon: <HomeIcon className="w-5 h-5" /> },
-    { name: 'Transactions', icon: <WalletIcon className="w-5 h-5" /> },
-    { 
-      name: 'Catégories', 
-      icon: <TagIcon className="w-5 h-5" />,
-      badge: '12'
-    },
-    { name: 'Analyses', icon: <ChartBarIcon className="w-5 h-5" /> },
-    { 
-      name: 'Rapports', 
-      icon: <DocumentChartBarIcon className="w-5 h-5" />,
-      badge: 'Nouveau'
-    },
-    { name: 'Paramètres', icon: <CogIcon className="w-5 h-5" /> },
-  ];
 
   const handleCurrencyChange = (currencyCode: string) => {
     setSelectedCurrency(currencyCode);

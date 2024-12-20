@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, Wallet, PieChart, Bell, Shield, Menu, X } fro
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -39,7 +40,7 @@ export default function Home() {
             Gérez vos finances<br />en toute simplicité
           </h1>
           <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12">
-            Une application moderne pour suivre vos dépenses, analyser vos habitudes et atteindre vos objectifs financiers.
+            L&apos;application qui simplifie la gestion de vos finances
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
@@ -88,9 +89,11 @@ export default function Home() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-40 
                 group-hover:opacity-20 transition-opacity duration-500" />
-              <img 
+              <Image 
                 src="/preview.png" 
                 alt="Aperçu de EXPENSY" 
+                width={1200}
+                height={800}
                 className="w-full h-auto transform group-hover:scale-[1.02] transition-transform duration-500"
               />
             </div>

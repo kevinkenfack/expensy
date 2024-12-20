@@ -37,7 +37,13 @@ const navigation = [
   { name: 'Paramètres', href: '/dashboard/settings', icon: <CogIcon className="w-5 h-5" /> },
 ];
 
-const NavItem = ({ item }: { item: any }) => {
+interface NavItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+}
+
+const NavItem = ({ item }: { item: NavItem }) => {
   const pathname = usePathname();
   const isActive = pathname === item.href;
 

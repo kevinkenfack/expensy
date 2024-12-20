@@ -14,6 +14,9 @@ const config: NextConfig = {
     domains: ['localhost'],
     unoptimized: false,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default config;

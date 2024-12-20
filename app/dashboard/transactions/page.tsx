@@ -1,18 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { 
-  HomeIcon, 
-  WalletIcon, 
-  ChartBarIcon, 
-  CogIcon, 
-  Bars3Icon as MenuIcon, 
-  XMarkIcon as XIcon, 
-  TagIcon, 
-  DocumentChartBarIcon,
-  FunnelIcon,
-} from "@heroicons/react/24/outline";
-import { ArrowUpRight } from "lucide-react";
+import { WalletIcon } from "@heroicons/react/24/outline";
 import Sidebar from "../../components/Sidebar";
 
 // Données de test pour les transactions

@@ -26,8 +26,8 @@ export default function UnauthorizedPage() {
             </h1>
 
             <p className="text-gray-400 mb-8 max-w-md mx-auto">
-              Cette page est réservée aux utilisateurs connectés. 
-              Veuillez vous connecter ou créer un compte pour accéder à votre tableau de bord.
+              Vous n&apos;avez pas accès à cette page. 
+              Veuillez vous connecter d&apos;abord pour accéder à votre tableau de bord.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
