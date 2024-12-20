@@ -20,49 +20,56 @@ export async function POST(req: Request) {
   try {
     const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
     if (!WEBHOOK_SECRET) {
-      throw new Error('CLERK_WEBHOOK_SECRET is not set');
+      throw new Error('CLERK_WEBHOOK_SECRET manquant');
     }
 
-    // Récupérer les headers de manière asynchrone
-    const headersList = headers();
-    const svix_id = headersList.get("svix-id");
-    const svix_timestamp = headersList.get("svix-timestamp");
-    const svix_signature = headersList.get("svix-signature");
+    const headersList = await headers();
+    const headerPayload = {
+      'svix-id': await headersList.get("svix-id"),
+      'svix-timestamp': await headersList.get("svix-timestamp"),
+      'svix-signature': await headersList.get("svix-signature")
+    };
 
-    if (!svix_id || !svix_timestamp || !svix_signature) {
+    if (!headerPayload['svix-id'] || !headerPayload['svix-timestamp'] || !headerPayload['svix-signature']) {
+      console.error('Headers manquants:', headerPayload);
       return new NextResponse('Headers manquants', { status: 400 });
     }
 
-    // Vérifier que le payload n'est pas null
     const payload = await req.json();
     if (!payload) {
-      return new NextResponse('Payload invalide', { status: 400 });
+      console.error('Payload manquant');
+      return new NextResponse('Payload manquant', { status: 400 });
     }
 
-    const body = JSON.stringify(payload);
     const wh = new Webhook(WEBHOOK_SECRET);
-
     let evt: WebhookEvent;
 
     try {
-      evt = wh.verify(body, {
-        "svix-id": svix_id,
-        "svix-timestamp": svix_timestamp,
-        "svix-signature": svix_signature,
-      }) as WebhookEvent;
+      evt = wh.verify(JSON.stringify(payload), headerPayload) as WebhookEvent;
     } catch (err) {
       console.error('Erreur de vérification webhook:', err);
-      return new NextResponse('Erreur de vérification', { status: 400 });
+      return new NextResponse('Signature invalide', { status: 400 });
     }
 
     const eventType = evt.type;
+    console.log('Type d\'événement:', eventType);
 
     if (eventType === 'user.created') {
-      console.log('Création utilisateur:', evt.data.id);
+      const { id, email_addresses, first_name, last_name } = evt.data;
       
+      const existingUser = await db.user.findUnique({
+        where: { clerkId: id },
+      });
+
+      if (existingUser) {
+        return NextResponse.json({ message: 'Utilisateur déjà existant' });
+      }
+
       const user = await db.user.create({
         data: {
-          clerkId: evt.data.id,
+          clerkId: id,
+          email: email_addresses?.[0]?.email_address,
+          name: `${first_name || ''} ${last_name || ''}`.trim(),
           categories: {
             create: defaultCategories.map(cat => ({
               ...cat,
@@ -75,13 +82,18 @@ export async function POST(req: Request) {
         },
       });
 
-      console.log('Catégories créées:', user.categories);
+      console.log('Utilisateur créé:', user.id);
+      console.log('Catégories créées:', user.categories.length);
+
       return NextResponse.json({ success: true });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ message: 'Webhook traité' });
   } catch (error) {
     console.error('Erreur webhook:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Erreur inconnue' }, 
+      { status: 500 }
+    );
   }
-} 
+}

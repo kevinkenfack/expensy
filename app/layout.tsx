@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from '@clerk/nextjs'
-import { Suspense } from 'react';
-import { Toaster } from 'sonner';
+import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mon Budget - Gérez vos finances",
-  description: "Application de gestion de budget personnelle",
+  title: "EXPENSY - Gérez vos finances",
+  description: "Application de gestion de finances personnelles",
+};
+
+export const viewport: Viewport = {
+  themeColor: '#1e1b4b',
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -20,23 +25,11 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="fr">
-        <body className={inter.className}>
-          <Suspense fallback={null}>
-            {children}
-          </Suspense>
-          <Toaster 
-            position="top-center"
-            toastOptions={{
-              style: {
-                background: 'rgba(20, 20, 20, 0.8)',
-                color: 'white',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(8px)',
-              },
-              className: 'rounded-xl',
-            }}
-            theme="dark"
-          />
+        <body className={`${inter.className} min-h-screen bg-background text-white`}>
+          {children}
+          <div className="md:pl-64">
+            <Footer />
+          </div>
         </body>
       </html>
     </ClerkProvider>
