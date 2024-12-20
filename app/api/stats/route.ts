@@ -1,64 +1,37 @@
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
+import { db } from "@/lib/db";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     if (!userId) {
       return new NextResponse("Non autorisé", { status: 401 });
     }
 
-    const { startDate, endDate } = await req.json();
-
-    const user = await db.user.findUnique({
-      where: { clerkId: userId },
+    // Récupérer les transactions de l'utilisateur
+    const transactions = await db.transaction.findMany({
+      where: {
+        userId: userId
+      }
     });
 
-    if (!user) {
-      return new NextResponse("Utilisateur non trouvé", { status: 404 });
-    }
+    // Calculer les statistiques
+    const stats = {
+      total: transactions.reduce((acc, t) => 
+        t.type === 'income' ? acc + t.amount : acc - t.amount, 0
+      ),
+      income: transactions
+        .filter(t => t.type === 'income')
+        .reduce((acc, t) => acc + t.amount, 0),
+      expense: transactions
+        .filter(t => t.type === 'expense')
+        .reduce((acc, t) => acc + t.amount, 0),
+    };
 
-    const [income, expenses] = await Promise.all([
-      db.transaction.aggregate({
-        where: {
-          userId: user.id,
-          type: "INCOME",
-          date: {
-            gte: startDate ? new Date(startDate) : undefined,
-            lte: endDate ? new Date(endDate) : undefined,
-          },
-        },
-        _sum: {
-          amount: true,
-        },
-      }),
-      db.transaction.aggregate({
-        where: {
-          userId: user.id,
-          type: "EXPENSE",
-          date: {
-            gte: startDate ? new Date(startDate) : undefined,
-            lte: endDate ? new Date(endDate) : undefined,
-          },
-        },
-        _sum: {
-          amount: true,
-        },
-      }),
-    ]);
-
-    const totalIncome = income._sum.amount || 0;
-    const totalExpenses = expenses._sum.amount || 0;
-    const balance = totalIncome - totalExpenses;
-
-    return NextResponse.json({
-      totalIncome,
-      totalExpenses,
-      balance,
-    });
+    return NextResponse.json(stats);
   } catch (error) {
-    console.error("[STATS]", error);
-    return new NextResponse("Erreur interne", { status: 500 });
+    console.error('Erreur lors du calcul des statistiques:', error);
+    return new NextResponse("Erreur interne du serveur", { status: 500 });
   }
 } 
