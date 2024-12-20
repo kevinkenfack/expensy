@@ -3,16 +3,23 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { transactionSchema } from "@/lib/validations/transaction";
+import { transactionSchema, TransactionFormData } from "@/lib/validations/transaction";
 
-export async function createTransaction(data: {
+export async function createTransaction({
+  amount,
+  type,
+  date,
+  description,
+  categoryId,
+}: {
   amount: number;
-  description?: string;
-  date: Date;
   type: "INCOME" | "EXPENSE";
+  date: Date;
+  description?: string;
   categoryId: string;
 }) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");
@@ -28,8 +35,12 @@ export async function createTransaction(data: {
 
   const transaction = await db.transaction.create({
     data: {
-      ...data,
+      amount,
+      type,
+      date,
+      description,
       userId: user.id,
+      categoryId,
     },
   });
 
@@ -45,7 +56,8 @@ export async function getTransactions(params: {
   type?: "INCOME" | "EXPENSE";
   categoryId?: string;
 }) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");
@@ -82,7 +94,8 @@ export async function updateTransaction(
   id: string,
   data: Partial<TransactionFormData>
 ) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");
@@ -109,7 +122,8 @@ export async function updateTransaction(
 }
 
 export async function deleteTransaction(id: string) {
-  const { userId } = auth();
+  const session = await auth();
+  const userId = session?.userId;
 
   if (!userId) {
     throw new Error("Non autorisé");
