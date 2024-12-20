@@ -24,16 +24,19 @@ export async function POST(req: Request) {
     }
 
     const headersList = await headers();
-    const headerPayload = {
-      'svix-id': await headersList.get("svix-id"),
-      'svix-timestamp': await headersList.get("svix-timestamp"),
-      'svix-signature': await headersList.get("svix-signature")
-    };
+    const svix_id = headersList.get("svix-id") ?? '';
+    const svix_timestamp = headersList.get("svix-timestamp") ?? '';
+    const svix_signature = headersList.get("svix-signature") ?? '';
 
-    if (!headerPayload['svix-id'] || !headerPayload['svix-timestamp'] || !headerPayload['svix-signature']) {
-      console.error('Headers manquants:', headerPayload);
+    if (!svix_id || !svix_timestamp || !svix_signature) {
       return new NextResponse('Headers manquants', { status: 400 });
     }
+
+    const headerPayload = {
+      'svix-id': svix_id,
+      'svix-timestamp': svix_timestamp,
+      'svix-signature': svix_signature
+    };
 
     const payload = await req.json();
     if (!payload) {
