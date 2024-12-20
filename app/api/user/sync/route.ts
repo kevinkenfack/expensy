@@ -1,24 +1,42 @@
-import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { currentUser } from "@clerk/nextjs/server";
+import { db } from "@/lib/db";
 
 export async function POST() {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
 
-    if (!userId) {
+    if (!user) {
       return new NextResponse("Non autorisé", { status: 401 });
     }
 
-    const user = await db.user.upsert({
-      where: { clerkId: userId },
-      update: {},
-      create: { clerkId: userId },
+    const existingUser = await db.user.findUnique({
+      where: { clerkId: user.id }
     });
 
-    return NextResponse.json(user);
+    if (!existingUser) {
+      await db.user.create({
+        data: {
+          clerkId: user.id,
+          email: user.emailAddresses[0]?.emailAddress,
+          name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+          imageUrl: user.imageUrl || null,
+        }
+      });
+    } else {
+      await db.user.update({
+        where: { clerkId: user.id },
+        data: {
+          email: user.emailAddresses[0]?.emailAddress,
+          name: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+          imageUrl: user.imageUrl || null,
+        }
+      });
+    }
+
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("[USER_SYNC]", error);
-    return new NextResponse("Erreur interne", { status: 500 });
+    console.error('Erreur lors de la synchronisation:', error);
+    return new NextResponse("Erreur interne du serveur", { status: 500 });
   }
 } 

@@ -12,6 +12,7 @@ model User {
   clerkId   String   @unique
   name      String?
   email     String?
+  imageUrl  String?
   currency  String   @default("EUR")
   language  String   @default("fr")
   theme     String   @default("dark")
