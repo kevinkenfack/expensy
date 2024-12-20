@@ -35,22 +35,17 @@ const monthlyData = [
   { month: 'Juin', revenus: 5500, dépenses: 3600, économies: 1900 },
 ];
 
-// Composant NavItem
-const NavItem = ({ item }) => (
+interface NavItem {
+  name: string;
+  href: string;
+  icon: JSX.Element;
+  description?: string;
+  badge?: string;
+}
+
+const NavItem = ({ item }: { item: NavItem }) => (
   <a
-    href={
-      item.name === 'Rapports' 
-        ? '/reports' 
-        : item.name === 'Paramètres' 
-          ? '/settings'
-          : item.name === 'Catégories'
-            ? '/categories'
-            : item.name === 'Analyses'
-              ? '/analytics'
-              : item.name === 'Transactions'
-                ? '/transactions'
-                : '/'
-    }
+    href={item.href}
     className={`group relative overflow-hidden rounded-2xl p-4 flex items-center gap-3 transition-all duration-300 
       ${item.name === 'Rapports'
         ? 'bg-white/10 text-white' 
